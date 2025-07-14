@@ -2,6 +2,7 @@
 # SPDX-FileContributor: Augustin Cisterne-Kaas <augustin.cisterne-kaas@elico-corp.com>
 # SPDX-FileCopyrightText: 2015 Tech-Receptives Solutions Pvt. Ltd.
 # SPDX-FileCopyrightText: 2022 Coop IT Easy SC
+# SPDX-FileCopyrightText: 2025 Nomadic, Inc
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later
 

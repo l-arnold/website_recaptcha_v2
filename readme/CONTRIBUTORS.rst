@@ -13,3 +13,7 @@
   * Carmen Bianca Bakker
   * Victor Champonnois
   * hugues de keyzer
+  
+* `Nomadic, Inc <https://nomadic.net`_:
+
+  * Landis Arnold
