@@ -37,6 +37,8 @@ check whether the user entry is valid.
 This module originally comes from ``website_recaptcha_reloaded`` from Tech
 Receptives, which itself comes from ``website_recaptcha`` from Elico Corp.
 
+This module has been reported to branch 14.0 from 16.0 from the above by Nomadic, Inc. (2025)
+
 **Table of contents**
 
 .. contents::
