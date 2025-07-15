@@ -17,41 +17,41 @@
             </div>
         </xpath>
     </template>
-	
-	<!-- Login Form -->
-	<template id="login_recaptcha" inherit_id="website.login">
-    <xpath expr="//button[@type='submit']" position="before">
-        <div class="form-group" t-if="request.website.recaptcha_site_key">
-            <div class="g-recaptcha" t-att-data-sitekey="request.website.recaptcha_site_key"></div>
-        </div>
-    </xpath>
-	</template>
-
-	<!-- Signup Form -->
-	<template id="signup_recaptcha" inherit_id="auth_signup.signup">
-    <xpath expr="//button[@type='submit']" position="before">
-        <div class="form-group" t-if="request.website.recaptcha_site_key">
-            <div class="g-recaptcha" t-att-data-sitekey="request.website.recaptcha_site_key"></div>
-        </div>
-    </xpath>
-	</template>
-	
-	<!-- Contact Form -->
-	<template id="contact_recaptcha" inherit_id="website.contactus">
-    <xpath expr="//button[@type='submit']" position="before">
-        <div class="form-group" t-if="request.website.recaptcha_site_key">
-            <div class="g-recaptcha" t-att-data-sitekey="request.website.recaptcha_site_key"></div>
-        </div>
-    </xpath>
-	</template>
-	
-	<!-- Password Reset Form -->
-	<template id="reset_password_recaptcha" inherit_id="auth_signup.reset_password">
-    <xpath expr="//button[@type='submit']" position="before">
-        <div class="form-group" t-if="request.website.recaptcha_site_key">
-            <div class="g-recaptcha" t-att-data-sitekey="request.website.recaptcha_site_key"></div>
-        </div>
-    </xpath>
-	</template>
-	
+    
+    <!-- Login Form - CORRECTED template ID -->
+    <template id="login_recaptcha" inherit_id="web.login">
+        <xpath expr="//button[@type='submit']" position="before">
+            <div class="form-group" t-if="request.website.recaptcha_site_key">
+                <div class="g-recaptcha" t-att-data-sitekey="request.website.recaptcha_site_key"></div>
+            </div>
+        </xpath>
+    </template>
+    
+    <!-- Signup Form -->
+    <template id="signup_recaptcha" inherit_id="auth_signup.signup">
+        <xpath expr="//button[@type='submit']" position="before">
+            <div class="form-group" t-if="request.website.recaptcha_site_key">
+                <div class="g-recaptcha" t-att-data-sitekey="request.website.recaptcha_site_key"></div>
+            </div>
+        </xpath>
+    </template>
+    
+    <!-- Contact Form - Only if website module has contactus -->
+    <template id="contact_recaptcha" inherit_id="website.contactus">
+        <xpath expr="//button[@type='submit']" position="before">
+            <div class="form-group" t-if="request.website.recaptcha_site_key">
+                <div class="g-recaptcha" t-att-data-sitekey="request.website.recaptcha_site_key"></div>
+            </div>
+        </xpath>
+    </template>
+    
+    <!-- Password Reset Form -->
+    <template id="reset_password_recaptcha" inherit_id="auth_signup.reset_password">
+        <xpath expr="//button[@type='submit']" position="before">
+            <div class="form-group" t-if="request.website.recaptcha_site_key">
+                <div class="g-recaptcha" t-att-data-sitekey="request.website.recaptcha_site_key"></div>
+            </div>
+        </xpath>
+    </template>
+    
 </odoo>
