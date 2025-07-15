@@ -8,4 +8,13 @@
             </div>
         </xpath>
     </template>
+
+    <!-- Generic website form (if it exists) -->
+    <template id="generic_form_recaptcha" inherit_id="website.form" optional="enabled">
+        <xpath expr="//button[@type='submit']" position="before">
+            <div class="form-group" t-if="request.website.recaptcha_site_key">
+                <div class="g-recaptcha" t-att-data-sitekey="request.website.recaptcha_site_key"></div>
+            </div>
+        </xpath>
+    </template>
 </odoo>
