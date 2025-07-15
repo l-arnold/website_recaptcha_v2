@@ -2,13 +2,12 @@
 <odoo>
     <!-- Checkout Address Form -->
     <template id="checkout_recaptcha" inherit_id="website_sale.address">
-        <xpath expr="//button[@name='submit']" position="before">
+        <xpath expr="//a[contains(@class, 'a-submit')]" position="before">
             <div class="form-group" t-if="request.website.recaptcha_site_key">
                 <div class="g-recaptcha" t-att-data-sitekey="request.website.recaptcha_site_key"></div>
             </div>
         </xpath>
     </template>
-
     <!-- Cart/Checkout Process -->
     <template id="cart_recaptcha" inherit_id="website_sale.cart">
         <xpath expr="//a[@href='/shop/checkout']" position="before">
