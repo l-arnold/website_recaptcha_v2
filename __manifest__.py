@@ -13,6 +13,7 @@
         "website",
         "web",
         "auth_signup", 
+        "portal",
         "website_sale",
         "website_form",
     ],
@@ -29,6 +30,7 @@
         "views/portal_templates.xml",
         "views/website_sale_templates.xml", 
         "views/website_form_templates.xml",
+        "views/auth_signup_templates.xml,
         "views/assets.xml",
     ],
     "demo": [
