@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Login Form -->
+    <template id="portal_login_recaptcha" inherit_id="portal.portal_login_form">
+        <xpath expr="//button[@type='submit']" position="before">
+            <div class="form-group" t-if="request.website.recaptcha_site_key">
+                <div class="g-recaptcha" t-att-data-sitekey="request.website.recaptcha_site_key"></div>
+            </div>
+        </xpath>
+    </template>
+
+    <!-- Signup Form -->
+    <template id="auth_signup_recaptcha" inherit_id="auth_signup.signup">
+        <xpath expr="//button[@type='submit']" position="before">
+            <div class="form-group" t-if="request.website.recaptcha_site_key">
+                <div class="g-recaptcha" t-att-data-sitekey="request.website.recaptcha_site_key"></div>
+            </div>
+        </xpath>
+    </template>
+</odoo>

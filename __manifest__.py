@@ -5,12 +5,17 @@
 # SPDX-fileCopyrightText: 2025 Nomadic, Inc.
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later
-
 {
     "name": "Website reCAPTCHA v2",
     "version": "14.0.1.0.0",
     "category": "Website",
-    "depends": ["website"],
+    "depends": [
+        "website",
+        "portal",
+        "auth_signup", 
+        "website_sale",
+        "website_form",
+    ],
     "author": (
         "Elico Corp, Tech Receptives, Coop IT Easy SC, "
         "Odoo Community Association (OCA)"
@@ -21,8 +26,14 @@
     "data": [
         "views/res_config_settings_view.xml",
         "views/website_templates.xml",
+        "views/portal_templates.xml",
+        "views/website_sale_templates.xml", 
+        "views/website_form_templates.xml",
+        "views/assets.xml",
     ],
     "demo": [
         "demo/demo.xml",
     ],
+    "installable": True,
+    "auto_install": False,
 }
