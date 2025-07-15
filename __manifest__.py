@@ -11,7 +11,7 @@
     "category": "Website",
     "depends": [
         "website",
-        "portal",
+        "web",
         "auth_signup", 
         "website_sale",
         "website_form",
