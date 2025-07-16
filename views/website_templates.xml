@@ -8,21 +8,16 @@ SPDX-FileCopyrightText: 2025 Nomadic, Inc.
 
 SPDX-License-Identifier: AGPL-3.0-or-later
 -->
-<?xml version="1.0" encoding="utf-8"?>
 <odoo>
-    <data>
-        
-        <!-- Add this if it's modifying a login form -->
-        <template id="login_recaptcha" inherit_id="web.login">
-            <xpath expr="//head" position="inside">
-                <script src="https://www.google.com/recaptcha/api.js" async="async" defer="defer"></script>
-            </xpath>
-            <xpath expr="//button[@type='submit']" position="before">
-                <div class="form-group" t-if="request.website.recaptcha_v2_enabled and request.website.recaptcha_v2_site_key">
-                    <div class="g-recaptcha" t-att-data-sitekey="request.website.recaptcha_v2_site_key"></div>
-                </div>
-            </xpath>
-        </template>
-        
-    </data>
+
+    <template id="recaptcha_widget" name="reCAPTCHA widget">
+        <t t-if="website.recaptcha_v2_enabled">
+            <div
+                class="g-recaptcha"
+                t-att-data-sitekey="website.recaptcha_v2_site_key"
+            />
+            <script src="https://www.recaptcha.net/recaptcha/api.js" async="true" />
+        </t>
+    </template>
+
 </odoo>
