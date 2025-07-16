@@ -17,10 +17,28 @@ RECAPTCHA_API_TIMEOUT = 30
 
 class Website(models.Model):
     _inherit = "website"
-
+    
     recaptcha_v2_enabled = fields.Boolean("Enable reCAPTCHA v2")
     recaptcha_v2_site_key = fields.Char("Site Key (v2)")
     recaptcha_v2_secret_key = fields.Char("Secret Key (v2)")
+    
+    # ADD THESE PROPERTIES:
+    @property
+    def recaptcha_site_key(self):
+        """Alias for template compatibility"""
+        return self.recaptcha_v2_site_key
+    
+    @property
+    def recaptcha_secret_key(self):
+        """Alias for template compatibility"""
+        return self.recaptcha_v2_secret_key
+    
+    @property
+    def recaptcha_enabled(self):
+        """Alias for template compatibility"""
+        return self.recaptcha_v2_enabled
+    
+    # ... rest of existing methods stay the same
 
     @api.model
     def _get_error_message(self, errorcode=None):
