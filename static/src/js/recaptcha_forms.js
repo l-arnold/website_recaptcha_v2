@@ -3,37 +3,68 @@ odoo.define('website_recaptcha_v2.recaptcha_forms', function (require) {
 
 var publicWidget = require('web.public.widget');
 
+// Global tracking to prevent duplicate initializations
+window.recaptchaInitialized = window.recaptchaInitialized || {};
+
 publicWidget.registry.RecaptchaForm = publicWidget.Widget.extend({
     selector: 'form:has(.g-recaptcha)',
     
     start: function () {
-        console.log('RecaptchaForm widget starting for:', this.$el[0]);
         this._super.apply(this, arguments);
+        
+        // Add a unique identifier to this form to prevent duplicate processing
+        if (!this.$el.attr('data-recaptcha-form-id')) {
+            this.$el.attr('data-recaptcha-form-id', 'recaptcha_form_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9));
+        }
+        
         this._loadRecaptcha();
     },
     
     _loadRecaptcha: function () {
         var self = this;
+        var formId = this.$el.attr('data-recaptcha-form-id');
         
-        // Debug: Log current state
-        console.log('Loading reCAPTCHA for form:', this.$el[0]);
-        console.log('Found .g-recaptcha elements:', this.$('.g-recaptcha').length);
+        // Check if this form has already been processed
+        if (window.recaptchaInitialized[formId]) {
+            console.log('reCAPTCHA already initialized for form:', formId);
+            return;
+        }
         
         if (typeof grecaptcha !== 'undefined' && grecaptcha.render) {
             this._initRecaptcha();
-        } else if (!window.recaptchaLoading) {
-            window.recaptchaLoading = true;
+        } else if (!window.recaptchaScriptLoading) {
+            window.recaptchaScriptLoading = true;
             
             var script = document.createElement('script');
             script.src = 'https://www.google.com/recaptcha/api.js';
             script.onload = function() {
-                setTimeout(function() {
-                    self._initRecaptcha();
-                }, 100);
+                // Wait for grecaptcha to be fully available
+                var waitForGrecaptcha = function() {
+                    if (typeof grecaptcha !== 'undefined' && grecaptcha.render) {
+                        // Initialize all pending forms
+                        $('form[data-recaptcha-form-id]').each(function() {
+                            var $form = $(this);
+                            var formId = $form.attr('data-recaptcha-form-id');
+                            
+                            if (!window.recaptchaInitialized[formId]) {
+                                var widget = $form.data('widget');
+                                if (widget && widget._initRecaptcha) {
+                                    widget._initRecaptcha();
+                                } else {
+                                    // Fallback initialization
+                                    self._initRecaptchaForForm($form);
+                                }
+                            }
+                        });
+                    } else {
+                        setTimeout(waitForGrecaptcha, 50);
+                    }
+                };
+                setTimeout(waitForGrecaptcha, 100);
             };
             script.onerror = function() {
                 console.error('Failed to load reCAPTCHA script');
-                window.recaptchaLoading = false;
+                window.recaptchaScriptLoading = false;
             };
             document.head.appendChild(script);
         } else {
@@ -47,37 +78,71 @@ publicWidget.registry.RecaptchaForm = publicWidget.Widget.extend({
             };
             setTimeout(checkReady, 100);
         }
+        
+        // Store widget reference on the form element
+        this.$el.data('widget', this);
     },
     
     _initRecaptcha: function () {
-        var self = this;
+        var formId = this.$el.attr('data-recaptcha-form-id');
         
-        // Only initialize reCAPTCHA elements within THIS widget's form
-        var recaptchaElements = this.$('.g-recaptcha');
+        // Check if already initialized
+        if (window.recaptchaInitialized[formId]) {
+            return;
+        }
         
-        console.log('Initializing reCAPTCHA for', recaptchaElements.length, 'elements in form:', this.$el[0]);
+        this._initRecaptchaForForm(this.$el);
+    },
+    
+    _initRecaptchaForForm: function($form) {
+        var formId = $form.attr('data-recaptcha-form-id');
+        
+        if (window.recaptchaInitialized[formId]) {
+            return;
+        }
+        
+        var recaptchaElements = $form.find('.g-recaptcha');
         
         recaptchaElements.each(function(index, element) {
-            console.log('Processing element:', element, 'widgetId:', element.dataset.widgetId);
+            // Skip if already has a widget ID
+            if (element.dataset.widgetId) {
+                return;
+            }
             
-            // Check if this element has already been initialized
-            if (!element.dataset.widgetId && element.dataset.sitekey) {
-                try {
-                    console.log('Rendering reCAPTCHA for element:', element);
-                    var widgetId = grecaptcha.render(element);
-                    element.dataset.widgetId = widgetId;
-                    console.log('Successfully rendered reCAPTCHA with widgetId:', widgetId);
-                } catch (error) {
-                    console.error('Error rendering reCAPTCHA:', error);
-                }
-            } else {
-                console.log('Element already initialized or missing sitekey:', element);
+            // Skip if no sitekey
+            if (!element.dataset.sitekey) {
+                console.error('reCAPTCHA element missing data-sitekey attribute');
+                return;
+            }
+            
+            try {
+                var widgetId = grecaptcha.render(element, {
+                    'sitekey': element.dataset.sitekey,
+                    'callback': function(response) {
+                        // Store response in a hidden input or handle as needed
+                        console.log('reCAPTCHA completed for form:', formId);
+                    },
+                    'expired-callback': function() {
+                        console.log('reCAPTCHA expired for form:', formId);
+                    }
+                });
+                
+                element.dataset.widgetId = widgetId;
+                console.log('Successfully rendered reCAPTCHA with widgetId:', widgetId, 'for form:', formId);
+                
+            } catch (error) {
+                console.error('Error rendering reCAPTCHA:', error);
             }
         });
+        
+        // Mark this form as initialized
+        window.recaptchaInitialized[formId] = true;
     },
     
     destroy: function() {
-        // Clean up reCAPTCHA widgets when destroying
+        var formId = this.$el.attr('data-recaptcha-form-id');
+        
+        // Clean up reCAPTCHA widgets
         var recaptchaElements = this.$('.g-recaptcha');
         recaptchaElements.each(function(index, element) {
             if (element.dataset.widgetId && typeof grecaptcha !== 'undefined' && grecaptcha.reset) {
@@ -89,6 +154,11 @@ publicWidget.registry.RecaptchaForm = publicWidget.Widget.extend({
                 }
             }
         });
+        
+        // Remove from initialized tracking
+        if (formId && window.recaptchaInitialized[formId]) {
+            delete window.recaptchaInitialized[formId];
+        }
         
         this._super.apply(this, arguments);
     }
