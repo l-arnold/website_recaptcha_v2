@@ -9,7 +9,7 @@
         </xpath>
     </template>
     
-    <!-- Cart/Checkout Process - FIXED XPath -->
+    <!-- Cart/Checkout Process -->
     <template id="cart_recaptcha" inherit_id="website_sale.cart">
         <xpath expr="//a[contains(@href, '/shop/checkout')]" position="before">
             <div class="form-group" t-if="request.website.recaptcha_site_key">
@@ -18,26 +18,6 @@
         </xpath>
     </template>
     
-    <!-- LOGIN TEMPLATE REMOVED - Already handled in portal_templates.xml -->
-    
-    <!-- Signup Form -->
-    <template id="signup_recaptcha" inherit_id="auth_signup.signup">
-        <xpath expr="//button[@type='submit']" position="before">
-            <div class="form-group" t-if="request.website.recaptcha_site_key">
-                <div class="g-recaptcha" t-att-data-sitekey="request.website.recaptcha_site_key"></div>
-            </div>
-        </xpath>
-    </template>
-    
-	   <!-- removed contactus form -->
-	
-    <!-- Password Reset Form -->
-    <template id="reset_password_recaptcha" inherit_id="auth_signup.reset_password">
-        <xpath expr="//button[@type='submit']" position="before">
-            <div class="form-group" t-if="request.website.recaptcha_site_key">
-                <div class="g-recaptcha" t-att-data-sitekey="request.website.recaptcha_site_key"></div>
-            </div>
-        </xpath>
-    </template>
+    <!-- ALL LOGIN/SIGNUP/RESET TEMPLATES REMOVED - Handled by portal_templates.xml -->
     
 </odoo>
