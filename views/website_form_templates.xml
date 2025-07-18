@@ -18,6 +18,6 @@
         </xpath>
     </template>
     
-    <!-- ALL LOGIN/SIGNUP/RESET TEMPLATES REMOVED - Handled by portal_templates.xml -->
+    <!-- All login/signup/reset templates removed - handled by portal_templates.xml -->
     
 </odoo>
