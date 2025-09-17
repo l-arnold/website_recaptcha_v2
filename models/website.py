@@ -94,3 +94,12 @@ class Website(models.Model):
         if not res.get("success"):
             return (False, _("The challenge was not successfully completed."))
         return (True, "")
+        
+    def _validate_recaptcha(self, recaptcha_response):
+        """
+        Simple validation method called by controllers.
+        Returns True if valid, False if invalid.
+        """
+        form_values = {'g-recaptcha-response': recaptcha_response}
+        is_valid, error_msg = self.is_recaptcha_v2_valid(form_values)
+        return is_valid  
