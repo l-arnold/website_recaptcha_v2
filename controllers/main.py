@@ -1,3 +1,7 @@
+import logging
+_logger = logging.getLogger(__name__)
+_logger.error("RECAPTCHA CONTROLLERS MODULE LOADED")
+
 from odoo import http
 from odoo.http import request
 from odoo.addons.portal.controllers.portal import CustomerPortal
