@@ -40,4 +40,15 @@ class RecaptchaAuthSignup(AuthSignupHome):
                 return request.render('auth_signup.signup', qcontext)
         return super(RecaptchaAuthSignup, self).web_auth_signup(*args, **kw)
 
+    @http.route('/web/login', type='http', auth='none', website=True)
+    def web_auth_login(self, redirect=None, **kw):
+        if request.httprequest.method == 'POST':
+            if not self._validate_recaptcha():
+                # Handle login reCAPTCHA failure
+                values = request.params.copy()
+                values['error'] = "reCAPTCHA verification failed. Please try again."
+                return request.render('web.login', values)
+        return super(RecaptchaAuthSignup, self).web_auth_login(redirect, **kw)
+
+
 # Similar extensions for other controllers...
