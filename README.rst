@@ -70,6 +70,7 @@ Authors
 * Elico Corp
 * Tech Receptives
 * Coop IT Easy SC
+* Nomadic Inc
 
 Contributors
 ~~~~~~~~~~~~
