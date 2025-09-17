@@ -100,6 +100,12 @@ class Website(models.Model):
         Simple validation method called by controllers.
         Returns True if valid, False if invalid.
         """
+        import logging
+        _logger = logging.getLogger(__name__)
+        _logger.error("_validate_recaptcha called with response: %s" % recaptcha_response)
+        
         form_values = {'g-recaptcha-response': recaptcha_response}
         is_valid, error_msg = self.is_recaptcha_v2_valid(form_values)
-        return is_valid  
+        
+        _logger.error("Validation result: %s, error: %s" % (is_valid, error_msg))
+        return is_valid
