@@ -2,16 +2,14 @@
 <!--
 SPDX-FileCopyrightText: 2025 Nomadic, Inc.
 SPDX-License-Identifier: AGPL-3.0-or-later
-
 Checkout-specific reCAPTCHA templates.
 Login/signup/reset are handled by portal_templates.xml.
 Contact Us is handled by website_form_templates.xml.
 -->
 <odoo>
-
     <!-- Checkout Address Form -->
     <template id="checkout_recaptcha" inherit_id="website_sale.address" name="reCAPTCHA v2 - Checkout Address">
-        <xpath expr="//button[hasclass('a-submit')]" position="before">
+        <xpath expr="//a[hasclass('a-submit-disable')]" position="before">
             <t t-if="request.website.recaptcha_v2_enabled">
                 <div class="form-group">
                     <div
@@ -22,22 +20,27 @@ Contact Us is handled by website_form_templates.xml.
             </t>
         </xpath>
         <!-- Disable the Next button until reCAPTCHA is completed -->
-        <xpath expr="//button[hasclass('a-submit')]" position="replace">
+        <xpath expr="//a[hasclass('a-submit-disable')]" position="replace">
             <t t-if="request.website.recaptcha_v2_enabled">
-                <button
-                    type="submit"
+                <a role="button"
+                    href="#"
                     id="recaptcha_submit"
                     class="btn btn-primary mb32 a-submit a-submit-disable a-submit-loading"
                     disabled="disabled"
-                >Next</button>
+                >
+                    <span>Next</span>
+                    <i class="fa fa-chevron-right"/>
+                </a>
             </t>
             <t t-else="">
-                <button
-                    type="submit"
+                <a role="button"
+                    href="#"
                     class="btn btn-primary mb32 a-submit a-submit-disable a-submit-loading"
-                >Next</button>
+                >
+                    <span>Next</span>
+                    <i class="fa fa-chevron-right"/>
+                </a>
             </t>
         </xpath>
     </template>
-
 </odoo>
