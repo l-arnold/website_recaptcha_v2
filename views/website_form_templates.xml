@@ -1,23 +1,41 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!--
+SPDX-FileCopyrightText: 2025 Nomadic, Inc.
+SPDX-License-Identifier: AGPL-3.0-or-later
+
+Website form templates: Contact Us / Leave a Message.
+Email field is already present in the native Odoo 14 contactus form — not duplicated here.
+-->
 <odoo>
-    <!-- Checkout Address Form -->
-    <template id="checkout_recaptcha" inherit_id="website_sale.address">
-        <xpath expr="//a[contains(@class, 'a-submit')]" position="before">
-            <div class="form-group" t-if="request.website.recaptcha_site_key">
-                <div class="g-recaptcha" t-att-data-sitekey="request.website.recaptcha_site_key"></div>
-            </div>
+
+    <!-- Contact Us / Leave a Message form
+         Inherits website.contactus_form (Odoo 14 standard contact form).
+         Adds reCAPTCHA widget and disables submit button until challenge is complete.
+         Email field is already present in the native form — not duplicated here.
+    -->
+    <template id="contactus_recaptcha" inherit_id="website.contactus_form" name="reCAPTCHA v2 - Contact Us">
+
+        <!-- Replace the submit button with a disabled version when reCAPTCHA is on -->
+        <xpath expr="//button[@type='submit']" position="replace">
+            <t t-if="request.website.recaptcha_v2_enabled">
+                <div class="form-group s_website_form_recaptcha">
+                    <div
+                        class="g-recaptcha"
+                        t-att-data-sitekey="request.website.recaptcha_v2_site_key"
+                    />
+                </div>
+                <button
+                    type="submit"
+                    id="recaptcha_submit"
+                    class="btn btn-primary btn-lg"
+                    disabled="disabled"
+                >Send Message</button>
+            </t>
+            <t t-else="">
+                <button type="submit" class="btn btn-primary btn-lg">Send Message</button>
+            </t>
         </xpath>
+
     </template>
-    
-    <!-- Cart/Checkout Process -->
-    <template id="cart_recaptcha" inherit_id="website_sale.cart">
-        <xpath expr="//a[contains(@href, '/shop/checkout')]" position="before">
-            <div class="form-group" t-if="request.website.recaptcha_site_key">
-                <div class="g-recaptcha" t-att-data-sitekey="request.website.recaptcha_site_key"></div>
-            </div>
-        </xpath>
-    </template>
-    
-    <!-- All login/signup/reset templates removed - handled by portal_templates.xml -->
-    
+
 </odoo>

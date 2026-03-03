@@ -1,22 +1,27 @@
-<?xml version="1.0" encoding="utf-8" ?>
+<?xml version="1.0" encoding="utf-8"?>
 <!--
 SPDX-FileCopyrightText: 2010-2014 Elico Corp
-SPDX-FileContributor: Augustin Cisterne-Kaas <augustin.cisterne-kaas@elico-corp.com>
-SPDX-FileCopyrightText: 2015 Tech-Receptives Solutions Pvt. Ltd.
 SPDX-FileCopyrightText: 2019 Coop IT Easy SC
 SPDX-FileCopyrightText: 2025 Nomadic, Inc.
-
 SPDX-License-Identifier: AGPL-3.0-or-later
+
+Reusable reCAPTCHA v2 widget snippet.
+Call with: <t t-call="website_recaptcha_v2.recaptcha_widget"/>
+The Google API script is loaded here; individual forms do NOT need to load it.
 -->
 <odoo>
 
-    <template id="recaptcha_widget" name="reCAPTCHA widget">
+    <template id="recaptcha_widget" name="reCAPTCHA v2 Widget">
         <t t-if="website.recaptcha_v2_enabled">
+            <script
+                src="https://www.recaptcha.net/recaptcha/api.js"
+                async="async"
+                defer="defer"
+            />
             <div
                 class="g-recaptcha"
                 t-att-data-sitekey="website.recaptcha_v2_site_key"
             />
-            <script src="https://www.recaptcha.net/recaptcha/api.js" async="true" />
         </t>
     </template>
 

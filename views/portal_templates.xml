@@ -1,29 +1,77 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!--
+SPDX-FileCopyrightText: 2025 Nomadic, Inc.
+SPDX-License-Identifier: AGPL-3.0-or-later
+-->
 <odoo>
+
     <!-- Login Form -->
-    <template id="portal_login_recaptcha" inherit_id="web.login">
-        <xpath expr="//button[@type='submit']" position="before">
-            <div class="form-group" t-if="request.website.recaptcha_site_key">
-                <div class="g-recaptcha" t-att-data-sitekey="request.website.recaptcha_site_key"></div>
-            </div>
+    <template id="portal_login_recaptcha" inherit_id="web.login" name="reCAPTCHA v2 - Login">
+        <xpath expr="//button[@type='submit']" position="replace">
+            <t t-if="request.website.recaptcha_v2_enabled">
+                <div class="form-group">
+                    <div
+                        class="g-recaptcha"
+                        t-att-data-sitekey="request.website.recaptcha_v2_site_key"
+                    />
+                </div>
+                <button
+                    type="submit"
+                    class="btn btn-primary btn-block"
+                    id="recaptcha_submit"
+                    disabled="disabled"
+                >Log in</button>
+            </t>
+            <t t-else="">
+                <button type="submit" class="btn btn-primary btn-block">Log in</button>
+            </t>
         </xpath>
     </template>
 
     <!-- Signup Form -->
-    <template id="auth_signup_recaptcha" inherit_id="auth_signup.signup">
-        <xpath expr="//button[@type='submit']" position="before">
-            <div class="form-group" t-if="request.website.recaptcha_site_key">
-                <div class="g-recaptcha" t-att-data-sitekey="request.website.recaptcha_site_key"></div>
-            </div>
+    <template id="auth_signup_recaptcha" inherit_id="auth_signup.signup" name="reCAPTCHA v2 - Signup">
+        <xpath expr="//button[@type='submit']" position="replace">
+            <t t-if="request.website.recaptcha_v2_enabled">
+                <div class="form-group">
+                    <div
+                        class="g-recaptcha"
+                        t-att-data-sitekey="request.website.recaptcha_v2_site_key"
+                    />
+                </div>
+                <button
+                    type="submit"
+                    class="btn btn-primary btn-block"
+                    id="recaptcha_submit"
+                    disabled="disabled"
+                >Sign up</button>
+            </t>
+            <t t-else="">
+                <button type="submit" class="btn btn-primary btn-block">Sign up</button>
+            </t>
         </xpath>
     </template>
 
     <!-- Reset Password Form -->
-    <template id="auth_reset_password_recaptcha" inherit_id="auth_signup.reset_password">
-        <xpath expr="//button[@type='submit']" position="before">
-            <div class="form-group" t-if="request.website.recaptcha_site_key">
-                <div class="g-recaptcha" t-att-data-sitekey="request.website.recaptcha_site_key"></div>
-            </div>
+    <template id="auth_reset_password_recaptcha" inherit_id="auth_signup.reset_password" name="reCAPTCHA v2 - Reset Password">
+        <xpath expr="//button[@type='submit']" position="replace">
+            <t t-if="request.website.recaptcha_v2_enabled">
+                <div class="form-group">
+                    <div
+                        class="g-recaptcha"
+                        t-att-data-sitekey="request.website.recaptcha_v2_site_key"
+                    />
+                </div>
+                <button
+                    type="submit"
+                    class="btn btn-primary btn-block"
+                    id="recaptcha_submit"
+                    disabled="disabled"
+                >Reset Password</button>
+            </t>
+            <t t-else="">
+                <button type="submit" class="btn btn-primary btn-block">Reset Password</button>
+            </t>
         </xpath>
     </template>
+
 </odoo>
