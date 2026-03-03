@@ -8,6 +8,7 @@
  *      completes the challenge — matching the server-side enforcement.
  *   4. Re-disables on expiry so a stale token cannot be submitted.
  *
+ * Works for both <button> and <a role="button"> submit elements.
  * The templates set disabled="disabled" on the submit button server-side.
  * This JS layer is defense-in-depth for browsers; server-side validation
  * in controllers/main.py is the authoritative check.
@@ -19,6 +20,32 @@ odoo.define('website_recaptcha_v2.recaptcha_forms', function (require) {
 
     // Track widget IDs keyed by form element so we can reset on expiry
     var formWidgetMap = {};
+
+    /**
+     * Disable a submit element — works for both <button> and <a> tags.
+     */
+    function disableSubmit($btn) {
+        $btn.attr('disabled', 'disabled')
+            .addClass('recaptcha-disabled')
+            .css({
+                'pointer-events': 'none',
+                'opacity': '0.65',
+                'cursor': 'not-allowed',
+            });
+    }
+
+    /**
+     * Enable a submit element — works for both <button> and <a> tags.
+     */
+    function enableSubmit($btn) {
+        $btn.removeAttr('disabled')
+            .removeClass('recaptcha-disabled')
+            .css({
+                'pointer-events': '',
+                'opacity': '',
+                'cursor': '',
+            });
+    }
 
     /**
      * Load the reCAPTCHA API script once per page.
@@ -78,6 +105,12 @@ odoo.define('website_recaptcha_v2.recaptcha_forms', function (require) {
                 return;
             }
 
+            // Ensure submit button is disabled on page load
+            var $submitBtn = this.$el.find('#recaptcha_submit');
+            if ($submitBtn.length) {
+                disableSubmit($submitBtn);
+            }
+
             loadRecaptchaScript(function () {
                 self._renderWidget(container);
             });
@@ -94,16 +127,16 @@ odoo.define('website_recaptcha_v2.recaptcha_forms', function (require) {
 
                     callback: function (token) {
                         // Valid response — enable the submit button
-                        $submitBtn.prop('disabled', false).removeAttr('disabled');
+                        enableSubmit($submitBtn);
                     },
 
                     'expired-callback': function () {
                         // Token expired — re-disable until user solves again
-                        $submitBtn.prop('disabled', true).attr('disabled', 'disabled');
+                        disableSubmit($submitBtn);
                     },
 
                     'error-callback': function () {
-                        $submitBtn.prop('disabled', true).attr('disabled', 'disabled');
+                        disableSubmit($submitBtn);
                         console.warn('[recaptcha_v2] reCAPTCHA error — check network and site key.');
                     },
                 });
