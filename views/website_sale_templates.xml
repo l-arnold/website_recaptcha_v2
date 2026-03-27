@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+SPDX-FileCopyrightText: 2025 Nomadic, Inc.
+SPDX-License-Identifier: AGPL-3.0-or-later
+Checkout-specific reCAPTCHA templates.
+Login/signup/reset are handled by portal_templates.xml.
+Contact Us is handled by website_form_templates.xml.
+-->
+<odoo>
+    <!-- Checkout Address Form -->
+    <template id="checkout_recaptcha" inherit_id="website_sale.address" name="reCAPTCHA v2 - Checkout Address">
+        <xpath expr="//a[hasclass('a-submit-disable')]" position="before">
+            <t t-if="request.website.recaptcha_v2_enabled">
+                <div class="form-group">
+                    <div
+                        class="g-recaptcha"
+                        t-att-data-sitekey="request.website.recaptcha_v2_site_key"
+                    />
+                </div>
+            </t>
+        </xpath>
+        <!-- Disable the Next button until reCAPTCHA is completed -->
+        <xpath expr="//a[hasclass('a-submit-disable')]" position="replace">
+            <t t-if="request.website.recaptcha_v2_enabled">
+                <a role="button"
+                    href="#"
+                    id="recaptcha_submit"
+                    class="btn btn-primary mb32 a-submit a-submit-disable a-submit-loading"
+                    disabled="disabled"
+                >
+                    <span>Next</span>
+                    <i class="fa fa-chevron-right"/>
+                </a>
+            </t>
+            <t t-else="">
+                <a role="button"
+                    href="#"
+                    class="btn btn-primary mb32 a-submit a-submit-disable a-submit-loading"
+                >
+                    <span>Next</span>
+                    <i class="fa fa-chevron-right"/>
+                </a>
+            </t>
+        </xpath>
+    </template>
+</odoo>

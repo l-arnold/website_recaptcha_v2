@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+SPDX-FileCopyrightText: 2025 Nomadic, Inc.
+SPDX-License-Identifier: AGPL-3.0-or-later
+Contact Us form reCAPTCHA template.
+-->
+<odoo>
+    <!-- Contact Us Form -->
+    <template id="contactus_recaptcha" inherit_id="website_form.contactus_form" name="reCAPTCHA v2 - Contact Us">
+        <xpath expr="//a[hasclass('s_website_form_send')]" position="before">
+            <t t-if="request.website.recaptcha_v2_enabled">
+                <div class="form-group s_website_form_recaptcha">
+                    <div
+                        class="g-recaptcha"
+                        t-att-data-sitekey="request.website.recaptcha_v2_site_key"
+                    />
+                </div>
+            </t>
+        </xpath>
+        <xpath expr="//a[hasclass('s_website_form_send')]" position="replace">
+            <t t-if="request.website.recaptcha_v2_enabled">
+                <a href="#"
+                    role="button"
+                    id="recaptcha_submit"
+                    class="btn btn-primary btn-lg s_website_form_send"
+                    disabled="disabled"
+                >Submit</a>
+            </t>
+            <t t-else="">
+                <a href="#"
+                    role="button"
+                    class="btn btn-primary btn-lg s_website_form_send"
+                >Submit</a>
+            </t>
+        </xpath>
+    </template>
+</odoo>
